@@ -31,7 +31,7 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             if (sender instanceof Player){
                 Player p = (Player) sender;
                 if (p.getDisplayName().contains("Recording")){
-                    p.setDisplayName(p.getName());
+                    
                 } else p.setDisplayName((Color.PURPLE + "[") + (Color.RED + "Recording") + (Color.PURPLE + "]") + " " + p.getName());
 
             } else sender.sendMessage(ChatColor.RED + "Bitte führe diesen Befehl als Spieler aus!");
