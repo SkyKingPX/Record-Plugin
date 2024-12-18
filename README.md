@@ -13,7 +13,7 @@ This is a simple Minecraft Plugin that uses the [LuckPerms API](https://luckperm
 ## Dependencies
 - [LuckPerms](https://luckperms.net/download)
 - [LPC](https://www.spigotmc.org/resources/lpc-chat-formatter-1-7-10-1-20.68965/)
-- [TAB (Shows the Status in the Tab bar - **optional**)](https://www.spigotmc.org/resources/tab-1-5-1-21-4.57806/)
+- [TAB](https://www.spigotmc.org/resources/tab-1-5-1-21-4.57806/) (Shows the Status in the Tab bar - **optional**)
 
 ## Installation
 1. Download the latest release of [LuckPerms](https://luckperms.net/download), [LPC](https://www.spigotmc.org/resources/lpc-chat-formatter-1-7-10-1-20.68965/) and the Record Plugin
