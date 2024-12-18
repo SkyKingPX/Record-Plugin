@@ -105,32 +105,32 @@ public final class Record extends JavaPlugin implements CommandExecutor {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.rec") && !p.hasPermission("group.live")) {
                         addGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Dir wurde erfolgreich der Status &5[&r&4Rec&r&5] &r&2verliehen."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&4Rec&r&5] &r&2to you."));
                     } else if (p.hasPermission("group.live")) {
                         removeGroup("live", user, luckPerms, p);
                         addGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Dir wurde erfolgreich der Status &5[&r&4Rec&r&5] &r&2verliehen."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&4Rec&r&5] &r&2to you."));
                     } else {
                         removeGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Dir wurde erfolgreich der Status &5[&r&4Rec&r&5] &r&2entzogen."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Removed the status &5[&r&4Rec&r&5] &r&2from you."));
                     }
-                } else p.sendMessage(ChatColor.RED + "Du kannst diesen Befehl nicht als Operator ausführen!");
+                } else p.sendMessage(ChatColor.RED + "You can't run this command as an Operator!");
             } else if (sender.hasPermission("lsrec.live") && (label.equalsIgnoreCase("l") || label.equalsIgnoreCase("live"))) {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.live") && !p.hasPermission("group.rec")) {
                         addGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Dir wurde erfolgreich der Status &5[&r&bLive&r&5] &r&2verliehen."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&bLive&r&5] &r&2to you."));
                     } else if (p.hasPermission("group.rec")) {
                         removeGroup("rec", user, luckPerms, p);
                         addGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Dir wurde erfolgreich der Status &5[&r&bLive&r&5] &r&2verliehen."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&bLive&r&5] &r&2to you."));
                     } else {
                         removeGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Dir wurde erfolgreich der Status &5[&r&bLive&r&5] &r&2entzogen."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Removed the status &5[&r&bLive&r&5] &r&2from you."));
                     }
-                } else p.sendMessage(ChatColor.RED + "Du kannst diesen Befehl nicht als Operator ausführen!");
-            } else sender.sendMessage(ChatColor.RED + "Du hast nicht die Berechtigung diesen Befehl auszuführen!");
-        } else sender.sendMessage(ChatColor.RED + "Bitte führe diesen Befehl als Spieler aus!");
+                } else p.sendMessage(ChatColor.RED + "You can't run this command as an Operator!");
+            } else sender.sendMessage(ChatColor.RED + "You have insufficient permissions to execute this command!");
+        } else sender.sendMessage(ChatColor.RED + "Please execute this command as a player!");
         return true;
     }
 
