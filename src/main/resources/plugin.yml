@@ -1,9 +1,15 @@
 name: Record
-version: '1.21.1-1.0.0'
+version: '1.21-1.0.0'
 main: de.skyking_px.record.Record
 api-version: '1.21'
 commands:
   rec:
-    description: Shows the '[Recording]' status in your Displayname
+    description: Shows the '[Rec]' status in your Displayname
     usage: /<command>
+    aliases: r
     permission: lsrec.rec
+  live:
+    description: Shows the '[Live]' status in your Displayname
+    usage: /<command>
+    aliases: l
+    permission: lsrec.live
