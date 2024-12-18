@@ -101,7 +101,7 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             LuckPerms luckPerms = provider.getProvider();
             User user = luckPerms.getUserManager().getUser(p.getUniqueId());
 
-            if (sender.hasPermission("lsrec.rec") && (label.equalsIgnoreCase("r") || label.equalsIgnoreCase("rec"))) {
+            if (sender.hasPermission("rec.rec") && (label.equalsIgnoreCase("r") || label.equalsIgnoreCase("rec"))) {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.rec") && !p.hasPermission("group.live")) {
                         addGroup("rec", user, luckPerms, p);
@@ -115,7 +115,7 @@ public final class Record extends JavaPlugin implements CommandExecutor {
                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Removed the status &5[&r&4Rec&r&5] &r&2from you."));
                     }
                 } else p.sendMessage(ChatColor.RED + "You can't run this command as an Operator!");
-            } else if (sender.hasPermission("lsrec.live") && (label.equalsIgnoreCase("l") || label.equalsIgnoreCase("live"))) {
+            } else if (sender.hasPermission("rec.live") && (label.equalsIgnoreCase("l") || label.equalsIgnoreCase("live"))) {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.live") && !p.hasPermission("group.rec")) {
                         addGroup("live", user, luckPerms, p);
