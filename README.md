@@ -3,8 +3,10 @@ This is a simple Minecraft Plugin that uses the [LuckPerms API](https://luckperm
 
 ## Features
 - /rec or /r to add/remove the [Rec] Status
+
 ![Recording Status](https://github.com/user-attachments/assets/f529cb35-f21a-4993-90a6-75f5b7315f00)
 - /live or /l to add/remove the [Live] Status
+
 ![Live Status](https://github.com/user-attachments/assets/2c76c37c-4f5c-422b-848c-28acc299d101)
 - You can execute either the /rec or the /live command while having a different status and the plugin will automatically change your status to the new one.
 
