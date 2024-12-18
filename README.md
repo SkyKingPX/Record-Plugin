@@ -1,6 +1,8 @@
 # Record Plugin - PaperMC 1.21+
 This is a simple Minecraft Plugin that uses the [LuckPerms API](https://luckperms.net/wiki/Developer-API) and [LuckPermsChat Plugin](https://www.spigotmc.org/resources/lpc-chat-formatter-1-7-10-1-20.68965/) to add and remove the [Rec] And [Live] Prefixes to/from your Username.
 
+[Download](https://modrinth.com/plugin/record)
+
 ## Features
 - /rec or /r to add/remove the [Rec] Status
 
@@ -16,7 +18,7 @@ This is a simple Minecraft Plugin that uses the [LuckPerms API](https://luckperm
 - [TAB](https://www.spigotmc.org/resources/tab-1-5-1-21-4.57806/) (Shows the Status in the Tab bar - **optional**)
 
 ## Installation
-1. Download the latest release of [LuckPerms](https://luckperms.net/download), [LPC](https://www.spigotmc.org/resources/lpc-chat-formatter-1-7-10-1-20.68965/) and the Record Plugin
+1. Download the latest release of [LuckPerms](https://luckperms.net/download), [LPC](https://www.spigotmc.org/resources/lpc-chat-formatter-1-7-10-1-20.68965/) and the [Record Plugin](https://modrinth.com/plugin/record)
 2. Put all of the jars into the plugins folder of your Server
 3. Done!
 
