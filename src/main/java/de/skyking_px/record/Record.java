@@ -4,26 +4,23 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
-import net.luckperms.api.node.NodeType;
-import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.node.types.PermissionNode;
 import net.luckperms.api.node.types.PrefixNode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 public final class Record extends JavaPlugin implements CommandExecutor {
 
@@ -37,6 +34,19 @@ public final class Record extends JavaPlugin implements CommandExecutor {
         this.getCommand("live").setExecutor(this);
         this.getCommand("live").setTabCompleter(this);
 
+        if (getDataFolder().mkdirs())
+            getLogger().info("Created plugin config directory");
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            try {
+                getLogger().info("Creating config file");
+                this.getConfig().options().copyDefaults(true);
+                Files.copy(Objects.requireNonNull(getResource("config.yml")), configFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             LuckPerms luckPerms = provider.getProvider();
@@ -45,43 +55,41 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             Bukkit.getPluginManager().disablePlugin(this);
         }
         LuckPerms luckPerms = provider.getProvider();
-        PrefixNode rec = PrefixNode.builder("&5[&r&4Rec&r&5] &r", 100).build();
-        PrefixNode live = PrefixNode.builder("&5[&r&bLive&r&5] &r", 100).build();
 
         // Create Group 'rec'
         if (luckPerms.getGroupManager().getGroup("rec") != null) {
-            getLogger().info("Group 'rec' already exists");
+            getLogger().info(getConfig().getString("messages.console.rec-group-already-exists"));
         } else {
             @NonNull CompletableFuture<Group> groupFuture = luckPerms.getGroupManager().createAndLoadGroup("rec");
             groupFuture.thenAccept(group -> {
-                PrefixNode prefixNode = PrefixNode.builder("&5[&r&4Rec&r&5] &r", 100).build();
+                PrefixNode prefixNode = PrefixNode.builder(getConfig().getString("rec-prefix"), getConfig().getInt("rec-prefix-weight")).build();
                 PermissionNode permissionNode = PermissionNode.builder("group.rec").value(true).build();
                 group.data().add(prefixNode);
                 group.data().add(permissionNode);
                 luckPerms.getGroupManager().saveGroup(group).thenRun(() ->
-                        getLogger().info("Created Group 'rec'")
+                        getLogger().info(getConfig().getString("messages.console.rec-group-created"))
                 );
             }).exceptionally(throwable -> {
-                getLogger().severe("Error while trying to create group 'rec': " + throwable.getMessage());
+                getLogger().severe(getConfig().getString("messages.console.error-creating-group-rec") + throwable.getMessage());
                 return null;
             });
         }
 
         // Create Group 'Live'
         if (luckPerms.getGroupManager().getGroup("live") != null) {
-            getLogger().info("Group 'live' already exists");
+            getLogger().info(getConfig().getString("messages.console.live-group-already-exists"));
         } else {
             @NonNull CompletableFuture<Group> groupFuture = luckPerms.getGroupManager().createAndLoadGroup("live");
             groupFuture.thenAccept(group -> {
-                PrefixNode prefixNode = PrefixNode.builder("&5[&r&bLive&r&5] &r", 100).build();
+                PrefixNode prefixNode = PrefixNode.builder(getConfig().getString("live-prefix"), getConfig().getInt("live-prefix-weight")).build();
                 PermissionNode permissionNode = PermissionNode.builder("group.live").value(true).build();
                 group.data().add(prefixNode);
                 group.data().add(permissionNode);
                 luckPerms.getGroupManager().saveGroup(group).thenRun(() ->
-                        getLogger().info("Created Group 'live'")
+                        getLogger().info(getConfig().getString("messages.console.live-group-created"))
                 );
             }).exceptionally(throwable -> {
-                getLogger().severe("Error while trying to create group 'live': " + throwable.getMessage());
+                getLogger().severe(getConfig().getString("messages.console.error-creating-group-live") + throwable.getMessage());
                 return null;
             });
         }
@@ -105,46 +113,46 @@ public final class Record extends JavaPlugin implements CommandExecutor {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.rec") && !p.hasPermission("group.live")) {
                         addGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&4Rec&r&5] &r&2to you."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-rec")));
                     } else if (p.hasPermission("group.live")) {
                         removeGroup("live", user, luckPerms, p);
                         addGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&4Rec&r&5] &r&2to you."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-rec")));
                     } else {
                         removeGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Removed the status &5[&r&4Rec&r&5] &r&2from you."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.removed-rec")));
                     }
-                } else p.sendMessage(ChatColor.RED + "You can't run this command as an Operator!");
+                } else p.sendMessage(ChatColor.translateAlternateColorCodes('&', "messages.player.cant-run-as-op"));
             } else if (sender.hasPermission("rec.live") && (label.equalsIgnoreCase("l") || label.equalsIgnoreCase("live"))) {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.live") && !p.hasPermission("group.rec")) {
                         addGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&bLive&r&5] &r&2to you."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-live")));
                     } else if (p.hasPermission("group.rec")) {
                         removeGroup("rec", user, luckPerms, p);
                         addGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Added the status &5[&r&bLive&r&5] &r&2to you."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-live")));
                     } else {
                         removeGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Removed the status &5[&r&bLive&r&5] &r&2from you."));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.removed-live")));
                     }
-                } else p.sendMessage(ChatColor.RED + "You can't run this command as an Operator!");
-            } else sender.sendMessage(ChatColor.RED + "You have insufficient permissions to execute this command!");
-        } else sender.sendMessage(ChatColor.RED + "Please execute this command as a player!");
+                } else p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.cant-run-as-op")));
+            } else sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.insufficient-perms")));
+        } else sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.please-run-as-player")));
         return true;
     }
 
     public void addGroup(String groupName, User user, LuckPerms luckPerms, Player p) {
         user.data().add(Node.builder("group." + groupName).build());
         luckPerms.getUserManager().saveUser(user).thenRun(() -> {
-            getLogger().info("Added status '[" + groupName + "]' to " + p.getName());
+            getLogger().info(getConfig().getString("messages.console.added-status-1") + groupName + getConfig().getString("messages.console.added-status-2") + p.getName());
         });
     }
 
     public void removeGroup(String groupName, User user, LuckPerms luckPerms, Player p) {
         user.data().remove(Node.builder("group." + groupName).build());
         luckPerms.getUserManager().saveUser(user).thenRun(() -> {
-            getLogger().info("Removed status '[" + groupName + "]' from " + p.getName());
+            getLogger().info(getConfig().getString("messages.console.removed-status-1") + groupName + getConfig().getString("messages.console.removed-status-2") + p.getName());
         });
     }
 }
