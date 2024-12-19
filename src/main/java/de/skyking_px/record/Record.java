@@ -47,6 +47,19 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             }
         }
 
+        String[] valueCheck = {getConfig().getString("reset-after-shutdown"), getConfig().getString("rec-prefix"), getConfig().getString("live-prefix"), getConfig().getInt("rec-prefix-weight").toString(), getConfig().getInt("live-prefix-weight").toString(), getConfig().getString("messages.console.invalid-config"), getConfig().getString("messages.console.rec-group-already-exists"), getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"), getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"), getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"), getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"), getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"), getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"), getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"), getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
+        for (String value : valueCheck) {
+            if (value == null) {
+                try {
+                    getLogger().severe(getConfig().getString("messages.console.invalid-config"));
+                    Bukkit.getPluginManager().disablePlugin(this);
+                } catch (NullPointerException e) {
+                    getLogger().severe("Invalid configuration file! Please check your config.yml!");
+                    Bukkit.getPluginManager().disablePlugin(this);
+                }
+            }
+        }
+
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             LuckPerms luckPerms = provider.getProvider();
@@ -113,28 +126,28 @@ public final class Record extends JavaPlugin implements CommandExecutor {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.rec") && !p.hasPermission("group.live")) {
                         addGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-rec")));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.rec-group-added")));
                     } else if (p.hasPermission("group.live")) {
                         removeGroup("live", user, luckPerms, p);
                         addGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-rec")));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.rec-group-added")));
                     } else {
                         removeGroup("rec", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.removed-rec")));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.rec-group-removed")));
                     }
                 } else p.sendMessage(ChatColor.translateAlternateColorCodes('&', "messages.player.cant-run-as-op"));
             } else if (sender.hasPermission("rec.live") && (label.equalsIgnoreCase("l") || label.equalsIgnoreCase("live"))) {
                 if (!sender.isOp()) {
                     if (!p.hasPermission("group.live") && !p.hasPermission("group.rec")) {
                         addGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-live")));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.live-group-added")));
                     } else if (p.hasPermission("group.rec")) {
                         removeGroup("rec", user, luckPerms, p);
                         addGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.added-live")));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.live-group-added")));
                     } else {
                         removeGroup("live", user, luckPerms, p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.removed-live")));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.live-group-removed")));
                     }
                 } else p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.cant-run-as-op")));
             } else sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.player.insufficient-perms")));
