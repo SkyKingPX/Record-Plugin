@@ -1,6 +1,6 @@
-# Should the Plugin reset the Player Status after a shutdown?
-reset-on-shutdown: false
-# Only works with reset-after-shutdown: true
+# Should the Plugin reset the Player Status after they log out? This unfortunately does not work when the server gets shut down.
+reset-on-logout: false
+# Only works with reset-on-logout: true
 delete-groups-on-shutdown: false
 
 # Prefixes
@@ -38,8 +38,8 @@ messages:
     #removed-status1: "Status '["
     removed-status2: "]' from "
     #removed-status2: "]' entfernt von "
-    reset-players: "Removed all Players from groups 'rec' and 'live'"
-    #reset-players: "Alle Spieler wurden aus den Gruppen 'rec' und 'live' entfernt"
+    reset-player: "Removed Player from group 'rec' and 'live' named "
+    #reset-player: "Spieler aus Gruppe 'rec' und 'live' entfernt mit dem Namen "
     deleted-group-rec: "Deleted group 'rec'"
     #deleted-group-rec: "Gruppe 'rec' wurde gelöscht"
     deleted-group-live: "Deleted group 'live'"
