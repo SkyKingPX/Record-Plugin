@@ -8,6 +8,7 @@ import net.luckperms.api.node.types.PermissionNode;
 import net.luckperms.api.node.types.PrefixNode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,29 +47,29 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        } else {
+            @Nullable String[] valueCheck = {String.valueOf(getConfig().getBoolean("reset-on-shutdown")), String.valueOf(getConfig().getBoolean("delete-groups-on-shutdown")),
+                    getConfig().getString("rec-prefix"), getConfig().getString("live-prefix"), String.valueOf(getConfig().getInt("rec-prefix-weight")),
+                    String.valueOf(getConfig().getInt("live-prefix-weight")), getConfig().getString("messages.console.invalid-config"),
+                    getConfig().getString("messages.console.rec-group-already-exists"),
+                    getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"),
+                    getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"),
+                    getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"),
+                    getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"),
+                    getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"),
+                    getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"),
+                    getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"),
+                    getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
 
-        @Nullable String[] valueCheck = {getConfig().getString("reset-after-shutdown"), getConfig().getString("rec-prefix"),
-                getConfig().getString("live-prefix"), String.valueOf(getConfig().getInt("rec-prefix-weight")),
-                String.valueOf(getConfig().getInt("live-prefix-weight")), getConfig().getString("messages.console.invalid-config"),
-                getConfig().getString("messages.console.rec-group-already-exists"),
-                getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"),
-                getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"),
-                getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"),
-                getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"),
-                getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"),
-                getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"),
-                getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"),
-                getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
-
-        for (String value : valueCheck) {
-            if (value == null) {
-                try {
-                    getLogger().severe(getConfig().getString("messages.console.invalid-config"));
-                    Bukkit.getPluginManager().disablePlugin(this);
-                } catch (NullPointerException e) {
-                    getLogger().severe("Invalid configuration file! Please check your config.yml!");
-                    Bukkit.getPluginManager().disablePlugin(this);
+            for (String value : valueCheck) {
+                if (value == null || value.isEmpty()) {
+                    try {
+                        getLogger().severe(getConfig().getString("messages.console.invalid-config"));
+                        Bukkit.getPluginManager().disablePlugin(this);
+                    } catch (NullPointerException e) {
+                        getLogger().severe("Invalid configuration file! Please check your config.yml!");
+                        Bukkit.getPluginManager().disablePlugin(this);
+                    }
                 }
             }
         }
@@ -125,6 +126,45 @@ public final class Record extends JavaPlugin implements CommandExecutor {
     public void onDisable() {
         // Plugin shutdown logic
         getLogger().info("Disabling Plugin...");
+        if (getConfig().getBoolean("reset-on-shutdown")) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+                LuckPerms luckPerms = provider.getProvider();
+                User user = luckPerms.getUserManager().getUser(p.getUniqueId());
+                if (p.hasPermission("group.rec")) {
+                    removeGroup("rec", user, luckPerms, p);
+                } else if (p.hasPermission("group.live")) {
+                    removeGroup("live", user, luckPerms, p);
+                }
+            }
+            for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+                LuckPerms luckPerms = provider.getProvider();
+                User user = luckPerms.getUserManager().getUser(p.getUniqueId());
+                if (p.getPlayer().hasPermission("group.rec")) {
+                    removeGroup("rec", user, luckPerms, p);
+                } else if (p.getPlayer().hasPermission("group.live")) {
+                    removeGroup("live", user, luckPerms, p);
+                }
+            }
+            getLogger().info(getConfig().getString("messages.console.reset-players"));
+
+            if (getConfig().getBoolean("delete-groups-on-shutdown")) {
+                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+                LuckPerms luckPerms = provider.getProvider();
+                Group recGroup = luckPerms.getGroupManager().getGroup("rec");
+                Group liveGroup = luckPerms.getGroupManager().getGroup("live");
+                if (recGroup != null) {
+                    luckPerms.getGroupManager().deleteGroup(recGroup);
+                    getLogger().info(getConfig().getString("messages.console.deleted-group-rec"));
+                }
+                if (liveGroup != null) {
+                    luckPerms.getGroupManager().deleteGroup(liveGroup);
+                    getLogger().info(getConfig().getString("messages.console.deleted-group-live"));
+                }
+            }
+
+        }
     }
 
     @Override
