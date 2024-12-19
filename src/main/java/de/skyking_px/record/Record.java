@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,19 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             }
         }
 
-        String[] valueCheck = {getConfig().getString("reset-after-shutdown"), getConfig().getString("rec-prefix"), getConfig().getString("live-prefix"), getConfig().getInt("rec-prefix-weight").toString(), getConfig().getInt("live-prefix-weight").toString(), getConfig().getString("messages.console.invalid-config"), getConfig().getString("messages.console.rec-group-already-exists"), getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"), getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"), getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"), getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"), getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"), getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"), getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"), getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
+        @Nullable String[] valueCheck = {getConfig().getString("reset-after-shutdown"), getConfig().getString("rec-prefix"),
+                getConfig().getString("live-prefix"), String.valueOf(getConfig().getInt("rec-prefix-weight")),
+                String.valueOf(getConfig().getInt("live-prefix-weight")), getConfig().getString("messages.console.invalid-config"),
+                getConfig().getString("messages.console.rec-group-already-exists"),
+                getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"),
+                getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"),
+                getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"),
+                getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"),
+                getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"),
+                getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"),
+                getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"),
+                getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
+
         for (String value : valueCheck) {
             if (value == null) {
                 try {
