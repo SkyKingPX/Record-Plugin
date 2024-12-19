@@ -1,0 +1,51 @@
+# Should the Plugin reset the Player Status after a shutdown?
+reset-after-shutdown: false
+
+# Prefixes
+rec-prefix: "&5[&r&4Rec&5] &r"
+live-prefix: "&5[&r&bLive&5] &r"
+
+# Prefix Weights - Controls the order of the prefixes
+# May be useful when having ranks/prefixes in LuckPerms
+rec-prefix-weight: 100
+live-prefix-weight: 100
+
+# Messages - (Un)Comment the German/English translations to change the language
+messages:
+  console: 
+    # Console Messages do not support Color Codes!
+    rec-group-already-exists: "Group 'rec' already exists!"
+    #rec-group-already-exists: "Gruppe 'rec' existiert bereits!"
+    rec-group-created: "Created Group 'rec'"
+    #rec-group-created: "Gruppe 'rec' wurde erstellt"
+    error-creating-group-rec: "Error while trying to create group 'rec': "
+    #error-creating-group-rec: "Fehler beim Erstellen der Gruppe 'rec': "
+    live-group-already-exists: "Group 'live' already exists!"
+    #live-group-already-exists: "Gruppe 'live' existiert bereits!"
+    live-group-created: "Created Group 'live'"
+    #live-group-created: "Gruppe 'live' wurde erstellt"
+    error-creating-group-live: "Error while trying to create group 'live': "
+    #error-creating-group-live: "Fehler beim Erstellen der Gruppe 'live': "
+    added-status-1: "Added status '["
+    #added-status-1: "Status '["
+    added-status-2: "]' to "
+    #added-status-2: "]' hinzugefügt zu "
+    removed-status1: "Removed status '["
+    #removed-status1: "Status '["
+    removed-status2: "]' from "
+    #removed-status2: "]' entfernt von "
+  player:
+    rec-group-added: "&2Added the status &5[&r&4Rec&r&5] &r&2to you."
+    #rec-group-added: "&2Du hast den Status &5[&r&4Rec&r&5] &r&2erhalten."
+    rec-group-removed: "&2Removed the status &5[&r&4Rec&r&5] &r&2from you."
+    #rec-group-removed: "&2Dir wurde der Status &5[&r&4Rec&r&5] &r&2entfernt."
+    live-group-added: "&2Added the status &5[&r&bLive&r&5] &r&2to you."
+    #live-group-added: "&2Du hast den Status &5[&r&bLive&r&5] &r&2erhalten."
+    live-group-removed: "&2Removed the status &5[&r&bLive&r&5] &r&2from you."
+    #live-group-removed: "&2Dir wurde der Status &5[&r&bLive&r&5] &r&2entfernt."
+    cannot-run-with-op: "&cYou can't run this command as an Operator!"
+    #cannot-run-with-op: "&cDu kannst diesen Befehl nicht als Operator ausführen!"
+    insufficient-perms: "&cYou have insufficient permissions to execute this command!"
+    #insufficient-perms: "&cDu hast nicht genügend Rechte, um diesen Befehl auszuführen!"
+    please-run-as-player: "&cPlease execute this command as a player!"
+    #please-run-as-player: "&cBitte führe diesen Befehl als Spieler aus!"
