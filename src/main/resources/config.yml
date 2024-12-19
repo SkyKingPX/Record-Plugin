@@ -14,6 +14,8 @@ live-prefix-weight: 100
 messages:
   console: 
     # Console Messages do not support Color Codes!
+    invalid-config: "Invalid configuration file! Please check the config.yml!"
+    #invalid-config: "Ungültige Konfigurationsdatei! Bitte überprüfe die config.yml!"
     rec-group-already-exists: "Group 'rec' already exists!"
     #rec-group-already-exists: "Gruppe 'rec' existiert bereits!"
     rec-group-created: "Created Group 'rec'"
