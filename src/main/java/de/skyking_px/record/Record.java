@@ -47,32 +47,37 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            @Nullable String[] valueCheck = {String.valueOf(getConfig().getBoolean("reset-on-shutdown")), String.valueOf(getConfig().getBoolean("delete-groups-on-shutdown")),
-                    getConfig().getString("rec-prefix"), getConfig().getString("live-prefix"), String.valueOf(getConfig().getInt("rec-prefix-weight")),
-                    String.valueOf(getConfig().getInt("live-prefix-weight")), getConfig().getString("messages.console.invalid-config"),
-                    getConfig().getString("messages.console.rec-group-already-exists"),
-                    getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"),
-                    getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"),
-                    getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"),
-                    getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"),
-                    getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"),
-                    getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"),
-                    getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"),
-                    getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
-
-            for (String value : valueCheck) {
-                if (value == null || value.isEmpty()) {
-                    try {
-                        getLogger().severe(getConfig().getString("messages.console.invalid-config"));
-                        Bukkit.getPluginManager().disablePlugin(this);
-                    } catch (NullPointerException e) {
-                        getLogger().severe("Invalid configuration file! Please check your config.yml!");
-                        Bukkit.getPluginManager().disablePlugin(this);
-                    }
-                }
-            }
         }
+//        else {
+//            @Nullable String[] valueCheck = {String.valueOf(getConfig().getBoolean("reset-on-shutdown")), String.valueOf(getConfig().getBoolean("delete-groups-on-shutdown")),
+//                    getConfig().getString("rec-prefix"), getConfig().getString("live-prefix"), String.valueOf(getConfig().getInt("rec-prefix-weight")),
+//                    String.valueOf(getConfig().getInt("live-prefix-weight")), getConfig().getString("messages.console.invalid-config"),
+//                    getConfig().getString("messages.console.rec-group-already-exists"),
+//                    getConfig().getString("messages.console.live-group-already-exists"), getConfig().getString("messages.console.rec-group-created"),
+//                    getConfig().getString("messages.console.live-group-created"), getConfig().getString("messages.console.error-creating-group-rec"),
+//                    getConfig().getString("messages.console.error-creating-group-live"), getConfig().getString("messages.console.rec-group-added"),
+//                    getConfig().getString("messages.player.rec-group-removed"), getConfig().getString("messages.player.live-group-added"),
+//                    getConfig().getString("messages.player.live-group-removed"), getConfig().getString("messages.player.cant-run-as-op"),
+//                    getConfig().getString("messages.player.insufficient-perms"), getConfig().getString("messages.player.please-run-as-player"),
+//                    getConfig().getString("messages.console.added-status-1"), getConfig().getString("messages.console.added-status-2"),
+//                    getConfig().getString("messages.console.removed-status-1"), getConfig().getString("messages.console.removed-status-2")};
+//
+//            for (String value : valueCheck) {
+//                if (value == null || value.isEmpty()) {
+//                    try {
+//                        getLogger().severe(getConfig().getString("messages.console.invalid-config"));
+//                        Bukkit.getPluginManager().disablePlugin(this);
+//                        break;
+//                    } catch (NullPointerException e) {
+//                        getLogger().severe("Invalid configuration file! Did you update it? Please check your config.yml!");
+//                        e.printStackTrace();
+//                        Bukkit.getPluginManager().disablePlugin(this);
+//                        break;
+//                    }
+//
+//                }
+//            }
+//        }
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
@@ -129,7 +134,7 @@ public final class Record extends JavaPlugin implements CommandExecutor {
         if (getConfig().getBoolean("reset-on-shutdown")) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-                LuckPerms luckPerms = provider.getProvider();
+                LuckPerms luckPerms = Objects.requireNonNull(provider).getProvider();
                 User user = luckPerms.getUserManager().getUser(p.getUniqueId());
                 if (p.hasPermission("group.rec")) {
                     removeGroup("rec", user, luckPerms, p);
@@ -137,16 +142,16 @@ public final class Record extends JavaPlugin implements CommandExecutor {
                     removeGroup("live", user, luckPerms, p);
                 }
             }
-            for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-                LuckPerms luckPerms = provider.getProvider();
-                User user = luckPerms.getUserManager().getUser(p.getUniqueId());
-                if (p.getPlayer().hasPermission("group.rec")) {
-                    removeGroup("rec", user, luckPerms, p);
-                } else if (p.getPlayer().hasPermission("group.live")) {
-                    removeGroup("live", user, luckPerms, p);
-                }
-            }
+//            for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+//                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+//                LuckPerms luckPerms = Objects.requireNonNull(provider).getProvider();
+//                User user = luckPerms.getUserManager().getUser(p.getUniqueId());
+//                if (Objects.requireNonNull(p.getPlayer()).hasPermission("group.rec")) {
+//                    removeGroupOffline("rec", user, luckPerms, p);
+//                } else if (Objects.requireNonNull(p.getPlayer()).hasPermission("group.live")) {
+//                    removeGroupOffline("live", user, luckPerms, p);
+//                }
+//            }
             getLogger().info(getConfig().getString("messages.console.reset-players"));
 
             if (getConfig().getBoolean("delete-groups-on-shutdown")) {
@@ -221,4 +226,11 @@ public final class Record extends JavaPlugin implements CommandExecutor {
             getLogger().info(getConfig().getString("messages.console.removed-status-1") + groupName + getConfig().getString("messages.console.removed-status-2") + p.getName());
         });
     }
+
+//    public void removeGroupOffline(String groupName, User user, LuckPerms luckPerms, OfflinePlayer p) {
+//        user.data().remove(Node.builder("group." + groupName).build());
+//        luckPerms.getUserManager().saveUser(user).thenRun(() -> {
+//            getLogger().info(getConfig().getString("messages.console.removed-status-1") + groupName + getConfig().getString("messages.console.removed-status-2") + p.getName());
+//        });
+//    }
 }
