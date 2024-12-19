@@ -29,7 +29,7 @@ public final class Record extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
         // Plugin startup logic
         getLogger().info("Loading Plugin...");
-        getLogger().info("By SkyKing_PX | Version: 1.21-1.0.0");
+        getLogger().info("By SkyKing_PX | Version: 1.21-1.1.0");
         this.getCommand("rec").setExecutor(this);
         this.getCommand("rec").setTabCompleter(this);
         this.getCommand("live").setExecutor(this);

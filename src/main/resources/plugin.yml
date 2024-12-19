@@ -1,5 +1,5 @@
 name: Record
-version: '1.21-1.0.0'
+version: '1.21-1.1.0'
 main: de.skyking_px.record.Record
 api-version: '1.21'
 depend: [LuckPerms, LPC]
