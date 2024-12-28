@@ -1,4 +1,5 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R5VHPMK)
+Discord: https://bit.ly/sk_px-dc
 
 # Record Plugin - PaperMC 1.21+
 This is a simple Minecraft Plugin that uses the [LuckPerms API](https://luckperms.net/wiki/Developer-API) and [LuckPermsChat Plugin](https://www.spigotmc.org/resources/lpc-chat-formatter-1-7-10-1-20.68965/) to add and remove the [Rec] And [Live] Prefixes to/from your Username.
