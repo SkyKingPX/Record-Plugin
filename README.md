@@ -1,4 +1,5 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R5VHPMK)
+
 Discord: https://bit.ly/sk_px-dc
 
 # Record Plugin - PaperMC 1.21+
