@@ -27,6 +27,8 @@ import org.checkerframework.checker.units.qual.Prefix;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,6 +37,7 @@ public final class Record extends JavaPlugin implements CommandExecutor, Listene
     @Override
     public void onEnable() {
         // Plugin startup logic
+        Instant loadingStart = Instant.now();
         getLogger().info("Loading Plugin...");
         getLogger().info("By SkyKing_PX | Version: 1.21-1.1.0");
         this.getCommand("rec").setExecutor(this);
@@ -90,6 +93,9 @@ public final class Record extends JavaPlugin implements CommandExecutor, Listene
         if (provider != null) {
             LuckPerms luckPerms = provider.getProvider();
             getLogger().info("LuckPerms API found! Version: " + luckPerms.getPluginMetadata().getVersion());
+            Instant loadingEnd = Instant.now();
+            Duration loadingPlugin = Duration.between(loadingStart, loadingEnd);
+            getLogger().info("Loading took " + loadingPlugin.toMillis() + "ms.");
         } else {
             getLogger().severe("LuckPerms API not found, disabling!");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -138,6 +144,7 @@ public final class Record extends JavaPlugin implements CommandExecutor, Listene
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        Instant disableStart = Instant.now();
         getLogger().info("Disabling Plugin...");
         if (getConfig().getBoolean("delete-groups-on-shutdown")) {
             RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
@@ -153,6 +160,9 @@ public final class Record extends JavaPlugin implements CommandExecutor, Listene
                 getLogger().info(getConfig().getString("messages.console.deleted-group-live"));
             }
         }
+        Instant disableEnd = Instant.now();
+        Duration disablePlugin = Duration.between(disableStart, disableEnd);
+        getLogger().info("Plugin Shutdown took " + disablePlugin.toMillis() + "ms.");
     }
 
     @Override
