@@ -1,13 +1,12 @@
-# Should the Plugin reset the Player Status after they log out? This unfortunately does not work when the server gets shut down.
-reset-on-logout: false
-# Only works with reset-on-logout: true
-delete-groups-on-shutdown: false
 # If a feedback message should be sent to a player when changing the status
 # (Messages are configurable)
 enable-private-feedback: true
 # If a public Broadcast should be sent (to all players) if a player changes the status
 # (Messages are configurable)
 enable-public-broadcast: false
+# If the command executor should be excluded from the broadcast
+# Requires enable-public-broadcast: true
+exclude-executor-from-broadcast: false
 
 # Prefixes
 rec-prefix: "&5[&r&4Rec&5] &r"
@@ -19,46 +18,60 @@ rec-prefix-weight: 100
 live-prefix-weight: 100
 
 # Messages - (Un)Comment the German/English translations to change the language
+# INFO: Available Placeholders: {player}, {prefix}, {group}
+# > A Placeholder is only available in those messages, that already contain it!
 messages:
   console: 
     # Console Messages do not support Color Codes!
     invalid-config: "Invalid configuration file! Did you update it? Please check the config.yml!"
     #invalid-config: "Ungültige Konfigurationsdatei! Hast du sie aktualisiert? Bitte überprüfe die config.yml!"
-    rec-group-already-exists: "Group 'rec' already exists!"
-    #rec-group-already-exists: "Gruppe 'rec' existiert bereits!"
-    rec-group-created: "Created Group 'rec'"
+    rec-group-already-exists: "Group 'rec' already exists, skipping creation"
+    #rec-group-already-exists: "Gruppe 'rec' existiert bereits, überspringe Erstellung"
+    rec-group-created: "Created group 'rec'"
     #rec-group-created: "Gruppe 'rec' wurde erstellt"
+    rec-group-updated: "Updated group 'rec'"
+    #rec-group-updated: "Gruppe 'rec' wurde aktualisiert"
+    updating-prefix-rec: "Updating Prefix for group 'rec'"
+    #updating-prefix-rec: "Aktualisiere Prefix für Gruppe 'rec'"
     error-creating-group-rec: "Error while trying to create group 'rec': "
     #error-creating-group-rec: "Fehler beim Erstellen der Gruppe 'rec': "
-    live-group-already-exists: "Group 'live' already exists!"
-    #live-group-already-exists: "Gruppe 'live' existiert bereits!"
-    live-group-created: "Created Group 'live'"
+    live-group-already-exists: "Group 'live' already exists, skipping creation"
+    #live-group-already-exists: "Gruppe 'live' existiert bereits, überspringe Erstellung"
+    live-group-created: "Created group 'live'"
     #live-group-created: "Gruppe 'live' wurde erstellt"
+    live-group-updated: "Updated group 'live'"
+    #live-group-updated: "Gruppe 'live' wurde aktualisiert"
+    updating-prefix-live: "Updating Prefix for group 'live'"
+    #updating-prefix-live: "Aktualisiere Prefix für Gruppe 'live'"
     error-creating-group-live: "Error while trying to create group 'live': "
     #error-creating-group-live: "Fehler beim Erstellen der Gruppe 'live': "
-    added-status-1: "Added status '["
-    #added-status-1: "Status '["
-    added-status-2: "]' to "
-    #added-status-2: "]' hinzugefügt zu "
-    removed-status1: "Removed status '["
-    #removed-status1: "Status '["
-    removed-status2: "]' from "
-    #removed-status2: "]' entfernt von "
-    reset-player: "Removed Player from group 'rec' and 'live' named "
-    #reset-player: "Spieler aus Gruppe 'rec' und 'live' entfernt mit dem Namen "
+    added-group: "Added group '{group}' to {player}"
+    #added-group: "Gruppe '{group}' wurde {player} hinzugefügt"
+    removed-group: "Removed group '{group}' from {player}"
+    #removed-group: "Gruppe '{group}' wurde von {player} entfernt"
+    reset-player: "Removed {player} from group 'rec' and 'live'"
+    #reset-player: "{player} wurde aus den Gruppen 'rec' und 'live' entfernt"
     deleted-group-rec: "Deleted group 'rec'"
     #deleted-group-rec: "Gruppe 'rec' wurde gelöscht"
     deleted-group-live: "Deleted group 'live'"
     #deleted-group-live: "Gruppe 'live' wurde gelöscht"
   player:
-    rec-group-added: "&2Added the status &5[&r&4Rec&r&5] &r&2to you."
-    #rec-group-added: "&2Du hast den Status &5[&r&4Rec&r&5] &r&2erhalten."
-    rec-group-removed: "&2Removed the status &5[&r&4Rec&r&5] &r&2from you."
-    #rec-group-removed: "&2Dir wurde der Status &5[&r&4Rec&r&5] &r&2entfernt."
-    live-group-added: "&2Added the status &5[&r&bLive&r&5] &r&2to you."
-    #live-group-added: "&2Du hast den Status &5[&r&bLive&r&5] &r&2erhalten."
-    live-group-removed: "&2Removed the status &5[&r&bLive&r&5] &r&2from you."
-    #live-group-removed: "&2Dir wurde der Status &5[&r&bLive&r&5] &r&2entfernt."
+    broadcast-add-rec: "{player} is now recording!"
+    #broadcast-add-rec: "{player} nimmt nun auf"
+    broadcast-add-live: "{player} is now live!"
+    #broadcast-add-live: "{player} ist jetzt live!"
+    broadcast-remove-rec: "{player} has ended their recording."
+    #broadcast-remove-rec: "{player} hat die Aufnahme beendet."
+    broadcast-remove-live: "{player} has ended their stream."
+    #broadcast-remove-live: "{player} hat den Stream beendet."
+    rec-group-added: "&2Added the status {prefix} &r&2to you."
+    #rec-group-added: "&2Du hast den Status {prefix} &r&2erhalten."
+    rec-group-removed: "&2Removed the status {prefix} &r&2from you."
+    #rec-group-removed: "&2Dir wurde der Status {prefix} &r&2entfernt."
+    live-group-added: "&2Added the status {prefix} &r&2to you."
+    #live-group-added: "&2Du hast den Status {prefix} &r&2erhalten."
+    live-group-removed: "&2Removed the status {prefix} &r&2from you."
+    #live-group-removed: "&2Dir wurde der Status {prefix} &r&2entfernt."
     cannot-run-with-op: "&cYou can't run this command as an Operator!"
     #cannot-run-with-op: "&cDu kannst diesen Befehl nicht als Operator ausführen!"
     insufficient-perms: "&cYou have insufficient permissions to execute this command!"
