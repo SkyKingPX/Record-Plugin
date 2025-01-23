@@ -2,6 +2,12 @@
 reset-on-logout: false
 # Only works with reset-on-logout: true
 delete-groups-on-shutdown: false
+# If a feedback message should be sent to a player when changing the status
+# (Messages are configurable)
+enable-private-feedback: true
+# If a public Broadcast should be sent (to all players) if a player changes the status
+# (Messages are configurable)
+enable-public-broadcast: false
 
 # Prefixes
 rec-prefix: "&5[&r&4Rec&5] &r"
